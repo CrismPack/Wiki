@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/GitBook/',
   title: "Crism Modpacks",
   description: "A VitePress Site",
   themeConfig: {
