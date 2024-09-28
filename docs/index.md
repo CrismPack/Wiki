@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Crism Modpacks"
-  text: "A VitePress Site"
+  text: ""
   tagline: My great project tagline
   actions:
     - theme: brand
@@ -22,4 +22,3 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-
