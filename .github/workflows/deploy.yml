@@ -7,8 +7,10 @@ on:
   # using the `master` branch as the default branch.
   push:
     branches: [main]
-  workflow_run: 
-    branches: [main]
+  workflow_run:
+    workflows: [Auto-merge CrismBot PRs]
+    types:
+      - completed
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
