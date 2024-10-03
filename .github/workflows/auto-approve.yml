@@ -10,3 +10,5 @@ jobs:
     if: github.actor == 'CrismBot'
     steps:
       - uses: hmarr/auto-approve-action@v4
+        with:
+            github-token: ${{ secrets.GH_PAT }}
