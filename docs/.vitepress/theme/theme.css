@@ -2,6 +2,7 @@
   --vp-c-blue-1: #ed1c1cce !important;
   --vp-c-blue-2: #f73d3d !important;
   --vp-c-blue-3: #ff6f6f !important;
+  --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(28, 108, 237, 0.1) !important;
 }
 
@@ -9,6 +10,7 @@
   --vp-c-blue-1: #cc0000;
   --vp-c-blue-2: #ff0000;
   --vp-c-blue-3: #ff0000;
+  --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(0, 102, 204, 0.1);
 
   --vp-c-brand-1: var(--vp-c-blue-3);
@@ -29,7 +31,6 @@
   );
   --vp-home-hero-image-filter: blur(66px)
 }
-
 .VPHomeHero {
   margin-top: 3rem !important;
   margin-bottom: 6rem;
