@@ -8,8 +8,8 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Breakneck', link: '/breakneck' },
-      { text: 'Insomnia', link: '/insomnia' }
+      { text: 'Breakneck', link: '/breakneck/introduction.md' },
+      { text: 'Insomnia', link: '/insomnia/introduction.md' }
     ],
 
 
@@ -38,7 +38,7 @@ export default defineConfig({
       '/insomnia/': [
         {
           text: 'Insomnia: Hardcore',
-          // link: '/insomnia/introduction.md',
+          link: '/insomnia/introduction.md',
           items: [
             {
               text: 'Changelogs',
