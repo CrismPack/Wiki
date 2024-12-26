@@ -8,7 +8,7 @@ export default defineConfig({
 
   head: [[
     'link',
-    {rel: 'icon', sizes: '32x32', href: '/assets/logo.webp'},
+    {rel: 'icon', sizes: '32x32', href: '/Wiki/assets/logo.webp'},
   ]],
 
   //description: "Here you will find information about our modpacks and the changes we make to them throughout each version.",
