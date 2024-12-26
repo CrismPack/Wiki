@@ -26,7 +26,7 @@ hero:
 features:
   - title: "Breakneck: Optimized"
     icon: 
-      src: /assets/breakneck-icon.gif
+      src: /assets/Breakneck-icon.gif
     details:  Level up your vanilla client with increased FPS, quality of life enhancements and visual improvements.
     link: /breakneck/introduction
     linkText: Check it out
