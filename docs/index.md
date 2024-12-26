@@ -5,20 +5,36 @@ layout: home
 hero:
   name: "Crism Modpacks"
   text: ""
-  tagline: My great project tagline
-  actions:
-    - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+  tagline: ""
+  # actions:
+  #   - theme: brand
+  #     text: "Insomnia: Hardcore"
+  #     link: /insomnia/introduction
+  #   - theme: brand
+  #     text: "Breakneck: Optimized"
+  #     link: /breakneck/introduction
+  #   - theme: alt
+  #     text: API Examples
+  #     link: /api-examples
+  image:
+    src: /assets/logo.png
+    alt: CrismPack Logo
+
+
+
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: "Breakneck: Optimized"
+    icon: 
+      src: /assets/breakneck-icon.gif
+    details:  Level up your vanilla client with increased FPS, quality of life enhancements and visual improvements.
+    link: /breakneck/introduction
+    linkText: Check it out
+
+  - title: "Insomnia: Hardcore"
+    icon: 
+      src: /assets/insomnia-icon.gif
+    details: A challenging RPG adventure with a focus on limited lives, skill trees and dimension based difficulty!
+    link: /insomnia/introduction
+    linkText: Check it out
 ---

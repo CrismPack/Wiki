@@ -4,22 +4,29 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   base: '/Wiki',
   title: "Crism Modpacks",
-  description: "Here you will find information about our modpacks and the changes we make to them throughout each version.",
+
+  //description: "Here you will find information about our modpacks and the changes we make to them throughout each version.",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Breakneck', link: '/breakneck/introduction.md' },
-      { text: 'Insomnia', link: '/insomnia/introduction.md' }
+      { text: 'Breakneck', link: '/breakneck/introduction' },
+      { text: 'Insomnia', link: '/insomnia/introduction' }
     ],
-
+    logo: "/assets/logo.png",
 
     sidebar: {
       '/breakneck/': [
         {
           text: 'Breakneck: Optimized',
+          //link: '/breakneck/introduction',
           items: [
+            { 
+              text: 'Introduction', 
+              link: '/breakneck/introduction' 
+            },
             {
               text: 'Changelogs',
+              // collapsed: true,
               items: [   
                 { text: '1.21', link: '/breakneck/changelogs/1.21' },
                 { text: '1.20', link: '/breakneck/changelogs/1.20' },
@@ -38,8 +45,12 @@ export default defineConfig({
       '/insomnia/': [
         {
           text: 'Insomnia: Hardcore',
-          link: '/insomnia/introduction.md',
+          //link: '/insomnia/introduction',
           items: [
+            { 
+              text: 'Introduction', 
+              link: '/insomnia/introduction' 
+            },
             {
               text: 'Changelogs',
               items: [   
@@ -49,7 +60,7 @@ export default defineConfig({
             },
             { 
               text: 'Modlist', 
-              link: '/breakneck/modlist' 
+              link: '/insomnia/modlist' 
             }
           ]
         },
