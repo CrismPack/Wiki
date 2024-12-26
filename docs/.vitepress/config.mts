@@ -5,6 +5,12 @@ export default defineConfig({
   base: '/Wiki',
   title: "Crism Modpacks",
 
+
+  head: [[
+    'link',
+    {rel: 'icon', sizes: '32x32', href: '/assets/logo.webp'},
+  ]],
+
   //description: "Here you will find information about our modpacks and the changes we make to them throughout each version.",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -12,7 +18,7 @@ export default defineConfig({
       { text: 'Breakneck', link: '/breakneck/introduction' },
       { text: 'Insomnia', link: '/insomnia/introduction' }
     ],
-    logo: "/assets/logo-small.png",
+    logo: "/assets/logo.webp",
 
     sidebar: {
       '/breakneck/': [

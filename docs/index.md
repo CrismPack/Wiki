@@ -17,7 +17,7 @@ hero:
   #     text: API Examples
   #     link: /api-examples
   image:
-    src: /assets/logo.png
+    src: /assets/logo-center.webp
     alt: CrismPack Logo
 
 
