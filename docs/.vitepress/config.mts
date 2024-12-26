@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/',
+  base: '/Wiki',
   title: "Crism Modpacks",
   description: "Here you will find information about our modpacks and the changes we make to them throughout each version.",
   themeConfig: {
