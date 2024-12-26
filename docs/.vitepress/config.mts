@@ -12,7 +12,7 @@ export default defineConfig({
       { text: 'Breakneck', link: '/breakneck/introduction' },
       { text: 'Insomnia', link: '/insomnia/introduction' }
     ],
-    logo: "/assets/logo.png",
+    logo: "/assets/logo-small.png",
 
     sidebar: {
       '/breakneck/': [
