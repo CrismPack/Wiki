@@ -54,6 +54,8 @@ export default defineConfig({
   title: "Crism Modpacks",
   appearance: 'dark',
 
+  ignoreDeadLinks: true,
+
   head: [[
     'link',
     {rel: 'icon', sizes: '32x32', href: '/Wiki/assets/logo.webp'},
