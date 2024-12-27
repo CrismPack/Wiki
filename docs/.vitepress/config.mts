@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   base: '/Wiki',
   title: "Crism Modpacks",
-
+  appearance: 'dark',
 
   head: [[
     'link',

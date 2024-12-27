@@ -9,7 +9,7 @@
 :root {
   --vp-c-blue-1: #cc0000;
   --vp-c-blue-2: #ff0000;
-  --vp-c-blue-3: #ff0000;
+  --vp-c-blue-3: #ff3f3f;
   --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(0, 102, 204, 0.1);
 
