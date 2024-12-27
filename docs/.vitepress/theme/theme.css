@@ -1,7 +1,7 @@
 :root.dark {
   --vp-c-blue-1: #ed1c1cce !important;
-  --vp-c-blue-2: #f73d3d !important;
-  --vp-c-blue-3: #ff6f6f !important;
+  --vp-c-blue-2: #ff2d2d !important;
+  --vp-c-blue-3: rgb(255, 77, 77) !important;
   --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(28, 108, 237, 0.1) !important;
 }
@@ -9,7 +9,7 @@
 :root {
   --vp-c-blue-1: #cc0000;
   --vp-c-blue-2: #ff0000;
-  --vp-c-blue-3: #ff3f3f;
+  --vp-c-blue-3: #eb3a3a;
   --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(0, 102, 204, 0.1);
 
@@ -29,7 +29,7 @@
     var(--vp-c-brand-1) 30%,
     var(--vp-c-brand-2)
   );
-  --vp-home-hero-image-filter: blur(66px)
+  --vp-home-hero-image-filter: blur(66px) saturate(.8) brightness(1.2)
 }
 .VPHomeHero {
   margin-top: 3rem !important;
