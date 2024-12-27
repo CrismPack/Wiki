@@ -76,7 +76,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'discord', link: 'https://discord.gg/Kss5gBgeDA' },
-      { icon: 'kofi', link: 'https://ko-fi.com/haxr_dev' },
+      { icon: 'kofi', link: 'https://ko-fi.com/haxr_dev' }
     ],
   }
 })
