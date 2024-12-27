@@ -29,7 +29,7 @@
     var(--vp-c-brand-1) 30%,
     var(--vp-c-brand-2)
   );
-  --vp-home-hero-image-filter: blur(66px) saturate(.8) brightness(1.2)
+  --vp-home-hero-image-filter: blur(80px) saturate(.8) brightness(1.2)
 }
 .VPHomeHero {
   margin-top: 3rem !important;
