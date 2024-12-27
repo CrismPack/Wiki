@@ -1,5 +1,53 @@
 import { defineConfig } from 'vitepress'
 
+
+
+
+import { readdirSync, statSync } from 'fs';
+import { resolve, join } from 'path';
+
+
+// Utility function to capitalize the first letter
+function capitalizeFirstLetter(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+
+// Dynamically get sidebar pages (Custom function)
+function getSidebarItems(folder: string, baseUrl: string): any[] {
+  const folderPath = resolve(folder);
+  const items = readdirSync(folderPath)
+    .filter((file) => !file.startsWith('_') && !file.startsWith('.')) // Exclude hidden files or files starting with `_`
+    .map((file) => {
+      const fullPath = join(folderPath, file);
+      const isDirectory = statSync(fullPath).isDirectory();
+      const name = capitalizeFirstLetter(file.replace(/\.md$/, '')); // Remove `.md` extension
+
+      if (isDirectory) {
+        const formattedName = name.toLowerCase() === 'changelogs' ? 'CHANGELOGS' : name; // Make "changelogs" uppercase
+        return {
+          text: formattedName,
+          collapsed: true,
+          items: getSidebarItems(fullPath, `${baseUrl}/${name}`),
+        };
+      } else {
+        return {
+          text: name,
+          link: `${baseUrl}/${name}`,
+        };
+      }
+    })
+    .sort((a, b) => {
+      // Sorting in descending order based on `text` property
+      if (a.text < b.text) return 1;
+      if (a.text > b.text) return -1;
+      return 0;
+    });
+
+  return items;
+}
+
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/Wiki',
@@ -33,12 +81,7 @@ export default defineConfig({
             {
               text: 'Changelogs',
               // collapsed: true,
-              items: [   
-                { text: '1.21', link: '/breakneck/changelogs/1.21' },
-                { text: '1.20', link: '/breakneck/changelogs/1.20' },
-                { text: '1.19', link: '/breakneck/changelogs/1.19' },
-                { text: '1.18', link: '/breakneck/changelogs/1.18' }
-              ]
+              items: getSidebarItems('./docs/breakneck/changelogs', '/breakneck/changelogs'),
             },
             { 
               text: 'Modlist', 
@@ -59,10 +102,7 @@ export default defineConfig({
             },
             {
               text: 'Changelogs',
-              items: [   
-                { text: '1.20.1', link: '/insomnia/changelogs/1.20' },
-                { text: '1.18.2', link: '/insomnia/changelogs/1.18' }
-              ]
+              items: getSidebarItems('./docs/insomnia/changelogs', '/insomnia/changelogs'),
             },
             { 
               text: 'Modlist', 

@@ -80,6 +80,10 @@ This is a dangerous warning.
 This is a details block.
 :::
 
+<div class="tip custom-block" style="padding-top: 8px"> 
+This is a client hotfix. Works with v1.4.3 servers.
+</div> 
+
 ## More
 
 Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).
