@@ -14,16 +14,11 @@
 Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Experience a new level of immersion and exploration with enhanced world generation, improved combat and new dungeons to conquer. With a unique revival system in place, your hardcore journey doesn't have to end prematurely just because one player in the group dies. Discover new content and mechanics that adds depth to the game, all while not straying too far from the beloved essence of Minecraft.
 
 
-<br>
-
-
 <!--Features image-->
 
 ## Features
 
 ![Features: Challenge Accepted, Exploration Elevated, Craft Your Character, more More MORE.](https://raw.githubusercontent.com/CrismPack/CDN/main/desc/insomnia/features.png)
-
-<br>
 
 
 ## Videos
