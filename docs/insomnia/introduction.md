@@ -1,5 +1,3 @@
-# Introduction
-
 <!--Modpack Banner-->
 ![Insomnia: Hardcore](https://raw.githubusercontent.com/CrismPack/CDN/main/desc/insomnia/insomnia.png)
 
@@ -11,8 +9,10 @@
 </center>
 
 
-Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Experience a new level of immersion and exploration with enhanced world generation, improved combat and new dungeons to conquer. With a unique revival system in place, your hardcore journey doesn't have to end prematurely just because one player in the group dies. Discover new content and mechanics that adds depth to the game, all while not straying too far from the beloved essence of Minecraft.
+# Introduction
 
+
+Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Experience a new level of immersion and exploration with enhanced world generation, improved combat and new dungeons to conquer. With a unique revival system in place, your hardcore journey doesn't have to end prematurely just because one player in the group dies. Discover new content and mechanics that adds depth to the game, all while not straying too far from the beloved essence of Minecraft.
 
 <!--Features image-->
 
@@ -41,3 +41,6 @@ Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Exper
 <iframe height="405" width="685" src="https://www.youtube.com/embed/videoseries?si=-k9N6cqXV8A2nhP4&list=PLyLJFbma6jcmMumh5umCM1Ggdk195jCyH&start=6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
     </iframe>
 </p>
+
+## Get the modpack
+[![curseforge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/modpacks/insomnia-hardcore)
