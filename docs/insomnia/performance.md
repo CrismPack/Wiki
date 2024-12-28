@@ -8,10 +8,10 @@ These tips exists to help you achieve the optimum performance when using the **I
 
 The biggest offender to performance in this pack is terrain generation. For the best client performance, it is greatly recommended to either pregenerate the terrain before playing or play on a dedicated server. 
 
-::: tip
+::: tip Bisect Hosting
 Save 25% off your first month when getting a dedicated server using our code "**CRISM**".
 
-[Bisect Hosting: Get Dedicated Server](https://bisecthosting.com/CRISM)
+[Get a dedicated server](https://bisecthosting.com/CRISM)
 :::
 
 ## Optimized Java Arguments
