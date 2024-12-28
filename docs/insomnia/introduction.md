@@ -28,20 +28,20 @@ Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Exper
 
 <div class="video-container">
     <iframe allowfullscreen="allowfullscreen" 
-            src="https://www.youtube.com/embed/i_DNgeFoW-o?si=Mh7EaGIuRgcYx35D&start=41" 
+            src="https://www.youtube-nocookie.com/embed/i_DNgeFoW-o?si=Mh7EaGIuRgcYx35D&start=41" 
             frameborder="0">
     </iframe>
 </div>
 
 <div class="video-container">
     <iframe allowfullscreen="allowfullscreen" 
-        src="https://www.youtube.com/embed/8tHj9W1Pyl4?si=1lxSSEMMWflMKsVK&start=30" 
+        src="https://www.youtube-nocookie.com/embed/8tHj9W1Pyl4?si=1lxSSEMMWflMKsVK&start=30" 
         frameborder="0">
     </iframe>
 </div>
 
 <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/videoseries?si=-k9N6cqXV8A2nhP4&list=PLyLJFbma6jcmMumh5umCM1Ggdk195jCyH&start=6" 
+    <iframe src="https://www.youtube-nocookie.com/embed/videoseries?si=-k9N6cqXV8A2nhP4&list=PLyLJFbma6jcmMumh5umCM1Ggdk195jCyH&start=6" 
             title="YouTube video player" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
