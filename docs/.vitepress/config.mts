@@ -66,8 +66,16 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Breakneck', link: '/breakneck/introduction' },
-      { text: 'Insomnia', link: '/insomnia/introduction' }
+      { 
+        text: 'Breakneck', 
+        link: '/breakneck/introduction',
+        activeMatch: '/breakneck/'
+      },
+      { 
+        text: 'Insomnia', 
+        link: '/insomnia/introduction',
+        activeMatch: '/insomnia/'
+      }
     ],
     logo: "/assets/logo.webp",
 
