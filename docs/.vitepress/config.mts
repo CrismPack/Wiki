@@ -102,6 +102,10 @@ export default defineConfig({
               text: 'Introduction', 
               link: '/insomnia/introduction' 
             },
+            { 
+              text: 'Performance Tips', 
+              link: '/insomnia/performance' 
+            },
             {
               text: 'Changelogs',
               items: getSidebarItems('./docs/insomnia/changelogs', '/insomnia/changelogs'),
