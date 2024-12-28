@@ -1,7 +1,7 @@
 :root.dark {
   --vp-c-blue-1: #ed1c1cce !important;
   --vp-c-blue-2: #ff2d2d !important;
-  --vp-c-blue-3: rgb(255, 77, 77) !important;
+  --vp-c-blue-3: #ff4d4d !important;
   --vp-code-color: ; /*<- This sets the code highlight to the default text color*/
   --vp-c-blue-soft: rgba(28, 108, 237, 0.1) !important;
 }

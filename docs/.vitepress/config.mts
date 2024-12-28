@@ -115,6 +115,10 @@ export default defineConfig({
               text: 'Performance Tips', 
               link: '/insomnia/performance' 
             },
+            { 
+              text: 'Official Server', 
+              link: '/insomnia/server' 
+            },
             {
               text: 'Changelogs',
               items: getSidebarItems('./docs/insomnia/changelogs', '/insomnia/changelogs'),
@@ -132,6 +136,6 @@ export default defineConfig({
     socialLinks: [
       { icon: 'discord', link: 'https://discord.gg/Kss5gBgeDA' },
       { icon: 'kofi', link: 'https://ko-fi.com/haxr_dev' }
-    ],
+    ]
   }
 })
