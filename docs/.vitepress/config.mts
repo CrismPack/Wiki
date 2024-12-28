@@ -129,6 +129,10 @@ export default defineConfig({
             { 
               text: 'Modlist', 
               link: '/insomnia/modlist' 
+            },
+            { 
+              text: 'Trello Board', 
+              link: 'https://trello.com/b/DTmlSKCi/insomnia-hardcore-1201' 
             }
           ]
         },
