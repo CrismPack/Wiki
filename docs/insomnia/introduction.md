@@ -26,8 +26,6 @@ Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Exper
 
 <!-- ![Videos](https://i.imgur.com/Ir1Evdh.png) -->
 
-<p style="text-align: center;">
-
 <div class="video-container">
     <iframe allowfullscreen="allowfullscreen" 
             src="https://www.youtube.com/embed/i_DNgeFoW-o?si=Mh7EaGIuRgcYx35D&start=41" 
@@ -51,7 +49,6 @@ Get ready for the ultimate hardcore adventure with **Insomnia: Hardcore**! Exper
             allowfullscreen>
     </iframe>
 </div>
-</p>
 
 ## Get the modpack
 [![curseforge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/modpacks/insomnia-hardcore)
