@@ -48,8 +48,8 @@ const staff = [
 # Official Server
 
 ## Server status
-![Server Status](http://status.mclive.eu/Official%20Server/insomnia.crismpack.net/25565/banner.png)
-
+<!-- https://mcstatus.io/docs -->
+![Status Widget](https://api.mcstatus.io/v2/widget/java/insomnia.crismpack.net)
 
 
 ## Staff
