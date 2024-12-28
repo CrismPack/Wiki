@@ -47,9 +47,12 @@ const staff = [
 
 # Official Server
 
-## Staff
+## Server status
+![Server Status](http://status.mclive.eu/Official%20Server/insomnia.crismpack.net/25565/banner.png)
 
-<!-- Say hello to our awesome team. -->
+
+
+## Staff
 
 <VPTeamMembers size="small" :members="staff" />
 
