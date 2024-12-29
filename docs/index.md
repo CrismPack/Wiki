@@ -25,14 +25,14 @@ hero:
 features:
   - title: "Breakneck: Optimized"
     icon: 
-      src: /assets/breakneck-icon.webp
+      src: /assets/breakneck-icon.gif
     details:  Level up your vanilla client with increased FPS, quality of life enhancements and visual improvements.
     link: /breakneck/introduction
     linkText: Check it out
 
   - title: "Insomnia: Hardcore"
     icon: 
-      src: /assets/insomnia-icon.webp
+      src: /assets/insomnia-icon.gif
     details: A challenging RPG adventure with a focus on limited lives, skill trees and dimension based difficulty!
     link: /insomnia/introduction
     linkText: Check it out
