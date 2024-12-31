@@ -49,7 +49,31 @@ const staff = [
 
 ## Server status
 <!-- https://mcstatus.io/docs -->
-![Status Widget](https://api.mcstatus.io/v2/widget/java/insomnia.crismpack.net)
+
+<img id="refreshable-image" src="https://api.mcstatus.io/v2/widget/java/insomnia.crismpack.net" alt="Auto-refreshing image" />
+
+
+<script>
+  function refreshImage() {
+    const img = document.getElementById('refreshable-image');
+    if (img) {
+      const url = new URL(img.src, window.location.origin);
+      url.searchParams.set('_t', Date.now()); // Add or update the `_t` query parameter with the current timestamp
+      
+      // Create a new Image object to preload the updated image
+      const newImg = new Image();
+      newImg.src = url.toString();
+
+      // Once the new image is loaded, update the `src` of the current image
+      newImg.onload = () => {
+        img.src = newImg.src;
+      };
+    }
+  }
+
+  // Refresh the image every 5 seconds
+  setInterval(refreshImage, 10000);
+</script>
 
 
 ## Staff
