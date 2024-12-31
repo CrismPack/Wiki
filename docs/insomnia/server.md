@@ -54,29 +54,25 @@ const staff = [
 
 
 <script>
-  if (typeof window !== "undefined") {
-    function refreshImage() {
-      const img = document.getElementById("refreshable-image");
-      if (img) {
-        const url = new URL(img.src, window.location.origin);
-        url.searchParams.set("_t", Date.now()); // Add or update the `_t` query parameter with the current timestamp
+  function refreshImage() {
+    const img = document.getElementById('refreshable-image');
+    if (img) {
+      const url = new URL(img.src, window.location.origin);
+      url.searchParams.set('_t', Date.now()); // Add or update the `_t` query parameter with the current timestamp
+      
+      // Create a new Image object to preload the updated image
+      const newImg = new Image();
+      newImg.src = url.toString();
 
-        // Preload the new image
-        const newImg = new Image();
-        newImg.src = url.toString();
-
-        // Once the new image is loaded, update the `src` of the current image
-        newImg.onload = () => {
-          img.src = newImg.src;
-        };
-      }
+      // Once the new image is loaded, update the `src` of the current image
+      newImg.onload = () => {
+        img.src = newImg.src;
+      };
     }
-
-    // Run the refresh logic only in the browser
-    window.addEventListener("DOMContentLoaded", () => {
-      setInterval(refreshImage, 10000); // Refresh every 5 seconds
-    });
   }
+
+  // Refresh the image every 5 seconds
+  setInterval(refreshImage, 10000);
 </script>
 
 
