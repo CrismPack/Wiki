@@ -1,8 +1,8 @@
 # Performance Tips
 
 These tips exists to help you achieve the optimum client-side performance when using the **Insomnia: Hardcore** modpack.
-1. Use the recommended amount of dedicated RAM *(You will be notified when launching the modpack)*. See how to change it here: [How to allocate more RAM](../ram-allocation)
-2. Install and use GraalVM 17 or above (Faster Java): [GraalVM download](https://www.graalvm.org/downloads/)
+1. Allocate the recommended amount of dedicated RAM *(You will be notified when launching the modpack of the ideal amount for your machine)*.
+2. Install and use GraalVM 17 (Faster Java): [GraalVM download](https://www.graalvm.org/downloads/)
 3. Use one of the optimized Java arguments found below that matches your Java distribution.
 
 The biggest offender to performance in this pack is terrain generation. For the best client performance, it is greatly recommended to either pregenerate the terrain before playing or play on a dedicated server. 
@@ -15,7 +15,7 @@ Save 25% off your first month when getting a dedicated server using our code "**
 
 ## Optimized Java Arguments
 
-Based on G1GC flags from: [Mukul1127/Minecraft-Performance-Flags-Benchmarks](https://github.com/Mukul1127/Minecraft-Performance-Flags-Benchmarks)
+Based on G1GC flags from: [Mukul1127/Minecraft-Java-Flags](https://github.com/Mukul1127/Minecraft-Java-Flags)
 
 #### GraalVM
 
