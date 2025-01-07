@@ -53,7 +53,7 @@ const kofiSvg = '<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/20
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/Wiki',
+  base: '/',
   title: "Crism Modpacks",
   appearance: 'dark',
   
