@@ -5,6 +5,7 @@ import { defineConfig } from 'vitepress'
 
 import { readdirSync, statSync } from 'fs';
 import { resolve, join } from 'path';
+import { dataMcVersions, compareKeys } from './changelog.mjs';
 
 
 // Utility function to capitalize the first letter
@@ -17,7 +18,10 @@ function capitalizeFirstLetter(text: string): string {
 function getSidebarItems(folder: string, baseUrl: string): any[] {
   const folderPath = resolve(folder);
   const items = readdirSync(folderPath)
-    .filter((file) => !file.startsWith('_') && !file.startsWith('.')) // Exclude hidden files or files starting with `_`
+    // Exclude hidden/underscore files and dynamic-route templates ([mc].md,
+    // [mc].paths.js); keep only markdown files and subdirectories.
+    .filter((file) => !file.startsWith('_') && !file.startsWith('.') && !file.startsWith('['))
+    .filter((file) => file.endsWith('.md') || statSync(join(folderPath, file)).isDirectory())
     .map((file) => {
       const fullPath = join(folderPath, file);
       const isDirectory = statSync(fullPath).isDirectory();
@@ -45,6 +49,22 @@ function getSidebarItems(folder: string, baseUrl: string): any[] {
     });
 
   return items;
+}
+
+
+// Changelog sidebar: legacy hand-rendered pages plus the data-driven MC pages,
+// merged and sorted newest-first with version-aware ordering.
+function getChangelogSidebar(pack: string): any[] {
+  const base = `/${pack}/changelogs`;
+  const legacy = getSidebarItems(`./docs/${pack}/changelogs`, base);
+  const dataItems = dataMcVersions(pack).map((mc: string) => ({
+    text: mc,
+    link: `${base}/${mc}`,
+  }));
+  const merged = [...dataItems, ...legacy].filter(
+    (item, i, all) => all.findIndex((o) => o.text === item.text) === i,
+  );
+  return merged.sort((a, b) => compareKeys(b.text, a.text));
 }
 
 
@@ -95,7 +115,7 @@ export default defineConfig({
             {
               text: 'Changelogs',
               // collapsed: true,
-              items: getSidebarItems('./docs/breakneck/changelogs', '/breakneck/changelogs'),
+              items: getChangelogSidebar('breakneck'),
             },
             { 
               text: 'Modlist', 
@@ -124,7 +144,7 @@ export default defineConfig({
             },
             {
               text: 'Changelogs',
-              items: getSidebarItems('./docs/insomnia/changelogs', '/insomnia/changelogs'),
+              items: getChangelogSidebar('insomnia'),
             },
             { 
               text: 'Modlist', 
