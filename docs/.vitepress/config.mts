@@ -5,7 +5,7 @@ import { defineConfig } from 'vitepress'
 
 import { readdirSync, statSync } from 'fs';
 import { resolve, join } from 'path';
-import { dataMcVersions, compareKeys } from './changelog.mjs';
+import { dataContentKeys, compareKeys } from './changelog.mjs';
 
 
 // Utility function to capitalize the first letter
@@ -57,9 +57,9 @@ function getSidebarItems(folder: string, baseUrl: string): any[] {
 function getChangelogSidebar(pack: string): any[] {
   const base = `/${pack}/changelogs`;
   const legacy = getSidebarItems(`./docs/${pack}/changelogs`, base);
-  const dataItems = dataMcVersions(pack).map((mc: string) => ({
-    text: mc,
-    link: `${base}/${mc}`,
+  const dataItems = dataContentKeys(pack).map((key: string) => ({
+    text: key,
+    link: `${base}/${key}`,
   }));
   const merged = [...dataItems, ...legacy].filter(
     (item, i, all) => all.findIndex((o) => o.text === item.text) === i,

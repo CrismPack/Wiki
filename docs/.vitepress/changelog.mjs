@@ -81,6 +81,18 @@ function anchorFor(version) {
   return v.includes('v') ? v : `v${v}`
 }
 
+// Content-update key: the first two numeric components of a Minecraft version,
+// so patches (26.1.1) share their content update's page (26.1). Mirrors the
+// tool's pack_version.minecraft_content_key.
+export function contentKey(mc) {
+  const nums = []
+  for (const part of String(mc || '').trim().split('.')) {
+    if (/^\d+$/.test(part)) nums.push(part)
+    else break
+  }
+  return nums.length ? nums.slice(0, 2).join('.') : String(mc || '').trim()
+}
+
 const codify = (line) => String(line).replace(/\[([^\]]+)\]/g, '`$1`')
 const bullets = (lines) => (lines || []).map((l) => `- ${l}`).join('\n')
 
@@ -98,14 +110,16 @@ function renderRelease(r, pack) {
   if ((r.mods?.updated || []).length) {
     badges.push(`<a href='/${pack}/mod-updates/${r.version}'><Badge type='tip' text='Mod Updates'/></a>`)
   }
+  if (r.minecraft) badges.push(`<Badge type='info' text='MC ${r.minecraft}'/>`)
   badges.push(`<Badge type='info' text='${loader}'/>`)
   if (r.released) badges.push(`<Badge type='info' text='${r.released}'/>`)
   out += badges.join('') + '\n'
-  // Comparison note when this release is diffed against a different MC line.
+  // Comparison note when this release is diffed against a different content
+  // update (crossing pages), not merely a patch within the same one.
   if (r.comparedTo && r.comparedTo.version && r.comparedTo.minecraft &&
-      r.comparedTo.minecraft !== r.minecraft) {
+      contentKey(r.comparedTo.minecraft) !== contentKey(r.minecraft)) {
     const c = r.comparedTo
-    out += `\n::: info\nChanges are in comparison to version [${c.version}](/${pack}/changelogs/${c.minecraft}#${anchorFor(c.version)}).\n:::\n`
+    out += `\n::: info\nChanges are in comparison to version [${c.version}](/${pack}/changelogs/${contentKey(c.minecraft)}#${anchorFor(c.version)}).\n:::\n`
   }
   if (r.prerelease) out += `\n::: warning\nThis is a pre-release. Here be dragons!\n:::\n`
   out += section('Update Overview ⭐', r.overview)
@@ -121,7 +135,8 @@ function renderRelease(r, pack) {
   return out
 }
 
-// Full markdown for one MC-version page (all its releases, newest first).
+// Full markdown for one content-update page (all its releases, newest first,
+// spanning any patch versions within the content update).
 export function renderMcPage(mc, releases) {
   const ordered = [...releases].sort((a, b) => compareKeys(b.version, a.version))
   const pack = ordered[0]?.pack || ''
@@ -141,11 +156,10 @@ export function releasesWithUpdates(pack) {
   return loadReleases(pack).filter((r) => (r.mods?.updated || []).length)
 }
 
-// Distinct MC versions that have data, newest first.
-export function dataMcVersions(pack) {
-  const seen = new Map()
-  for (const r of loadReleases(pack)) {
-    if (!seen.has(r.minecraft)) seen.set(r.minecraft, r.minecraft)
-  }
-  return [...seen.keys()].sort((a, b) => compareKeys(b, a))
+// Distinct content-update keys that have data, newest first. Patch versions
+// (26.1.1) collapse into their content update (26.1), so each key is one page.
+export function dataContentKeys(pack) {
+  const seen = new Set()
+  for (const r of loadReleases(pack)) seen.add(contentKey(r.minecraft))
+  return [...seen].sort((a, b) => compareKeys(b, a))
 }
