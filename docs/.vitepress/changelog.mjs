@@ -125,6 +125,7 @@ function renderRelease(r, pack) {
   out += section('Update Overview ⭐', r.overview)
   out += section('Changes/Improvements ⭐', r.changes)
   out += section('Bug Fixes 🪲', r.bugfixes)
+  out += section('Script/Datapack Changes 📝', r.scriptChanges)
   out += section('Added Mods ✅', r.mods?.added)
   out += section('Removed Mods ❌', r.mods?.removed)
   out += section('Added Resource Packs 📦', r.resourcepacks?.added)
