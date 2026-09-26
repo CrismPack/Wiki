@@ -97,15 +97,39 @@ export function contentKey(mc) {
 const codify = (line) => String(line).replace(/\[([^\]]+)\]/g, '`$1`')
 const bullets = (lines) => (lines || []).map((l) => `- ${l}`).join('\n')
 
-function section(title, lines) {
-  if (!lines || !lines.length) return ''
-  return `\n### ${title}\n\n${bullets(lines)}\n`
+// A pre-release's kind and full release: { kind: 'beta', full: '26.2-1.0' } for
+// "26.2-1.0-beta.1", { kind: 'beta', full: '2.2.0' } for "2.2.0b1"; null for a
+// full release. Mirrors the tool's version.PrereleaseKind: a plain "pre" or
+// "preview" ("2.0.0.pre1") is just a pre-release, and "4.1.1a" is a
+// post-release.
+const PRE_KINDS = { a: 'alpha', alpha: 'alpha', b: 'beta', beta: 'beta', c: 'rc', rc: 'rc', preview: 'pre', pre: 'pre', dev: 'dev' }
+
+function prerelease(version) {
+  const m = /^(\d.*?)[-_.]?(alpha|beta|rc|preview|pre|dev|[abc](?=\d))[-_.]?\d*$/i.exec(String(version))
+  return m ? { kind: PRE_KINDS[m[2].toLowerCase()], full: m[1] } : null
 }
 
-function renderRelease(r, pack) {
+// A pre-release's badge, and the notice that also heads its release notes
+// (the tool's changelog.PrereleaseNotice).
+const PRE_LABELS = {
+  alpha: { badge: 'danger', text: 'Alpha', notice: 'an alpha' },
+  beta: { badge: 'warning', text: 'Beta', notice: 'a beta' },
+  rc: { badge: 'warning', text: 'Release Candidate', notice: 'a release candidate' },
+  dev: { badge: 'danger', text: 'Dev Build', notice: 'a development build' },
+  pre: { badge: 'warning', text: 'Pre-release', notice: 'a pre-release' },
+}
+
+// One release: its heading at the given level, its sections one level below.
+// A pre-release is labeled on its heading, and explained in a notice when it
+// isn't folded under its full release.
+function renderRelease(r, pack, { level = 2, notice = true } = {}) {
   const anchor = anchorFor(r.version)
   const loader = `${r.loader?.name ? r.loader.name[0].toUpperCase() + r.loader.name.slice(1) : ''} ${r.loader?.version || ''}`.trim()
-  let out = `\n## ${anchor} <a href='#${anchor}' id='${anchor}'></a>\n\n`
+  const label = r.prerelease ? PRE_LABELS[prerelease(r.version)?.kind ?? 'pre'] : null
+  const section = (title, lines) =>
+    lines && lines.length ? `\n${'#'.repeat(level + 1)} ${title}\n\n${bullets(lines)}\n` : ''
+  const badge = label ? ` <Badge type='${label.badge}' text='${label.text}'/>` : ''
+  let out = `\n${'#'.repeat(level)} ${anchor}${badge} <a href='#${anchor}' id='${anchor}'></a>\n\n`
   const badges = []
   // Detailed mod version bumps live on their own page, linked from here.
   if ((r.mods?.updated || []).length) {
@@ -122,7 +146,9 @@ function renderRelease(r, pack) {
     const c = r.comparedTo
     out += `\n::: info\nChanges are in comparison to version [${c.version}](/${pack}/changelogs/${contentKey(c.minecraft)}#${anchorFor(c.version)}).\n:::\n`
   }
-  if (r.prerelease) out += `\n::: warning\nThis is a pre-release. Here be dragons!\n:::\n`
+  if (label && notice) {
+    out += `\n::: warning\nThis is ${label.notice}, so it may be less stable or feature complete than a full release. Here be dragons!\n:::\n`
+  }
   out += section('Update Overview ⭐', r.overview)
   out += section('Changes/Improvements ⭐', r.changes)
   out += section('Bug Fixes 🪲', r.bugfixes)
@@ -137,15 +163,39 @@ function renderRelease(r, pack) {
   return out
 }
 
-// Full markdown for one content-update page (all its releases, newest first,
-// spanning any patch versions within the content update). Links point into
-// the pack's wiki folder, which can differ from its name: InsomniaHardcore
-// lives in docs/insomnia.
+// A page's releases, newest first. A pre-release is a release of its own,
+// labeled as one, unless its full release covers it: a full release that is
+// compared with the previous full release rather than with one of its
+// pre-releases (the tool's "prereleases: previews"). Those pre-releases are
+// folded under it, out of the way but still linkable. Links point into the
+// pack's wiki folder, which can differ from its name: InsomniaHardcore lives
+// in docs/insomnia.
+function renderReleases(folder, releases) {
+  const lower = (v) => String(v).toLowerCase()
+  const fullOf = (v) => prerelease(v)?.full.toLowerCase()
+  const folds = new Map(releases
+    .filter((r) => !r.prerelease && r.comparedTo?.version && fullOf(r.comparedTo.version) !== lower(r.version))
+    .map((r) => [lower(r.version), []]))
+  const shown = []
+  for (const r of releases) {
+    const fold = r.prerelease && folds.get(fullOf(r.version))
+    if (fold) fold.push(r)
+    else shown.push(r)
+  }
+  const newestFirst = (a, b) => compareKeys(b.version, a.version)
+  return shown.sort(newestFirst).map((r) => {
+    const pres = (folds.get(lower(r.version)) ?? []).sort(newestFirst)
+    const folded = pres.map((p) => renderRelease(p, folder, { level: 3, notice: false })).join('\n')
+    return renderRelease(r, folder) + (pres.length ? `\n:::: details Pre-releases (${pres.length})\n${folded}\n::::\n` : '')
+  }).join('\n')
+}
+
+// Full markdown for one content-update page (all its releases, spanning any
+// patch versions within the content update).
 function renderMcPage(folder, mc, releases) {
-  const ordered = [...releases].sort((a, b) => compareKeys(b.version, a.version))
-  const pack = ordered[0]?.pack || ''
-  const title = `# ${pack ? pack + ' ' : ''}Changelog for ${mc}\n`
-  return title + ordered.map((r) => renderRelease(r, folder)).join('\n')
+  const newest = [...releases].sort((a, b) => compareKeys(b.version, a.version))[0]
+  const title = `# ${newest?.pack ? newest.pack + ' ' : ''}Changelog for ${mc}\n`
+  return title + renderReleases(folder, releases)
 }
 
 // A Minecraft line with a hand-written page from before the release records
@@ -166,8 +216,8 @@ function renderLinePage(folder, key, releases) {
   const heading = first === -1 ? history : history.slice(0, first)
   const entries = (first === -1 ? [] : history.slice(first).split(/^(?=## )/m))
     .filter((entry) => !recorded.has(/id='([^']+)'/.exec(entry.split('\n', 1)[0])?.[1]))
-  const ordered = [...releases].sort((a, b) => compareKeys(b.version, a.version))
-  return heading + ordered.map((r) => renderRelease(r, folder) + '\n').join('') + entries.join('')
+  const rendered = renderReleases(folder, releases)
+  return heading + (rendered && rendered + '\n') + entries.join('')
 }
 
 // Content-update keys that have a history file (_<key>.md).
