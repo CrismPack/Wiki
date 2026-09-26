@@ -76,9 +76,11 @@ const kofiSvg = '<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/20
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/',
-  // A line's changelog history (changelogs/_<key>.md) is shown on its generated
-  // page, not as a page of its own (see renderLinePage in changelog.mjs).
-  srcExclude: ['**/changelogs/_*.md'],
+  // Files starting with "_" are shown on generated pages, not as pages of their
+  // own: a line's changelog history (changelogs/_<key>.md, see renderLinePage
+  // in changelog.mjs) and a pack's hand-written _modlist.md until a release
+  // lists its contents (see modlistPage in modlist.mjs).
+  srcExclude: ['**/_*.md'],
   title: "Crism Modpacks",
   appearance: 'dark',
   

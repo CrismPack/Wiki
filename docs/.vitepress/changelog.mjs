@@ -80,7 +80,7 @@ export function compareKeys(a, b) {
 
 // The changelog heading/anchor text: MC-scheme versions as-is, legacy versions
 // keep the historical "v" prefix rule. Mirrors pack_version.format_version_anchor.
-function anchorFor(version) {
+export function anchorFor(version) {
   const v = String(version)
   if (/^\d+(\.\d+)*-\d+(\.\d+)*(-(alpha|beta|rc)\.?\d*)?$/i.test(v)) return v
   return v.includes('v') ? v : `v${v}`
@@ -124,10 +124,17 @@ const PRE_LABELS = {
   pre: { badge: 'warning', text: 'Pre-release', notice: 'a pre-release' },
 }
 
+// The release that a pack's main modlist page shows: its newest full release
+// that lists its contents.
+export function modlistRelease(releases) {
+  return releases.filter((r) => r.contents && !r.prerelease).sort((a, b) => compareKeys(b.version, a.version))[0]
+}
+
 // One release: its heading at the given level, its sections one level below.
 // A pre-release is labeled on its heading, and explained in a notice when it
-// isn't folded under its full release.
-function renderRelease(r, pack, { level = 2, notice = true } = {}) {
+// isn't folded under its full release. modlist is the version the pack's main
+// modlist page shows, whose Modlist badge links there.
+function renderRelease(r, pack, { level = 2, notice = true, modlist } = {}) {
   const anchor = anchorFor(r.version)
   const loader = `${r.loader?.name ? r.loader.name[0].toUpperCase() + r.loader.name.slice(1) : ''} ${r.loader?.version || ''}`.trim()
   const label = r.prerelease ? PRE_LABELS[prerelease(r.version)?.kind ?? 'pre'] : null
@@ -136,9 +143,14 @@ function renderRelease(r, pack, { level = 2, notice = true } = {}) {
   const badge = label ? ` <Badge type='${label.badge}' text='${label.text}'/>` : ''
   let out = `\n${'#'.repeat(level)} ${anchor}${badge} <a href='#${anchor}' id='${anchor}'></a>\n\n`
   const badges = []
-  // Detailed mod version bumps live on their own page, linked from here.
+  // Detailed mod version bumps and the full modlist live on their own pages,
+  // linked from here.
   if ((r.mods?.updated || []).length) {
     badges.push(`<a href='/${pack}/mod-updates/${r.version}'><Badge type='tip' text='Mod Updates'/></a>`)
+  }
+  if (r.contents) {
+    const list = r.version === modlist ? `/${pack}/modlist` : `/${pack}/modlist/${r.version}`
+    badges.push(`<a href='${list}'><Badge type='tip' text='Modlist'/></a>`)
   }
   if (r.minecraft) badges.push(`<Badge type='info' text='MC ${r.minecraft}'/>`)
   badges.push(`<Badge type='info' text='${loader}'/>`)
@@ -175,7 +187,7 @@ function renderRelease(r, pack, { level = 2, notice = true } = {}) {
 // folded under it, out of the way but still linkable. Links point into the
 // pack's wiki folder, which can differ from its name: InsomniaHardcore lives
 // in docs/insomnia.
-function renderReleases(folder, releases) {
+function renderReleases(folder, releases, modlist) {
   const lower = (v) => String(v).toLowerCase()
   const fullOf = (v) => prerelease(v)?.full.toLowerCase()
   const folds = new Map(releases
@@ -190,17 +202,17 @@ function renderReleases(folder, releases) {
   const newestFirst = (a, b) => compareKeys(b.version, a.version)
   return shown.sort(newestFirst).map((r) => {
     const pres = (folds.get(lower(r.version)) ?? []).sort(newestFirst)
-    const folded = pres.map((p) => renderRelease(p, folder, { level: 3, notice: false })).join('\n')
-    return renderRelease(r, folder) + (pres.length ? `\n:::: details Pre-releases (${pres.length})\n${folded}\n::::\n` : '')
+    const folded = pres.map((p) => renderRelease(p, folder, { level: 3, notice: false, modlist })).join('\n')
+    return renderRelease(r, folder, { modlist }) + (pres.length ? `\n:::: details Pre-releases (${pres.length})\n${folded}\n::::\n` : '')
   }).join('\n')
 }
 
 // Full markdown for one content-update page (all its releases, spanning any
 // patch versions within the content update).
-function renderMcPage(folder, mc, releases) {
+function renderMcPage(folder, mc, releases, modlist) {
   const newest = [...releases].sort((a, b) => compareKeys(b.version, a.version))[0]
   const title = `# ${newest?.pack ? newest.pack + ' ' : ''}Changelog for ${mc}\n`
-  return title + renderReleases(folder, releases)
+  return title + renderReleases(folder, releases, modlist)
 }
 
 // A Minecraft line with a hand-written page from before the release records
@@ -209,19 +221,19 @@ function renderMcPage(folder, mc, releases) {
 // releases from records first, under the history's heading, then the history.
 // A history entry for a version that has a record by now, such as a "Work in
 // progress" entry, is left out, so a line can move over before its release.
-function renderLinePage(folder, key, releases) {
+function renderLinePage(folder, key, releases, modlist) {
   let history
   try {
     history = readFileSync(resolve(`./docs/${folder}/changelogs/_${key}.md`), 'utf-8')
   } catch {
-    return renderMcPage(folder, key, releases)
+    return renderMcPage(folder, key, releases, modlist)
   }
   const recorded = new Set(releases.map((r) => anchorFor(r.version)))
   const first = history.search(/^## /m)
   const heading = first === -1 ? history : history.slice(0, first)
   const entries = (first === -1 ? [] : history.slice(first).split(/^(?=## )/m))
     .filter((entry) => !recorded.has(/id='([^']+)'/.exec(entry.split('\n', 1)[0])?.[1]))
-  const rendered = renderReleases(folder, releases)
+  const rendered = renderReleases(folder, releases, modlist)
   return heading + (rendered && rendered + '\n') + entries.join('')
 }
 
@@ -240,9 +252,10 @@ export function historyKeys(folder) {
 // records or a history file.
 export function mcPages(folder) {
   const releases = loadReleases(folder)
+  const modlist = modlistRelease(releases)?.version
   return [...new Set([...dataContentKeys(folder), ...historyKeys(folder)])].map((key) => ({
     params: { mc: key },
-    content: renderLinePage(folder, key, releases.filter((r) => contentKey(r.minecraft) === key)),
+    content: renderLinePage(folder, key, releases.filter((r) => contentKey(r.minecraft) === key), modlist),
   }))
 }
 
