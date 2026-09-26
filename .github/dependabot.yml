@@ -1,0 +1,20 @@
+# Dependabot keeps the site's npm packages (VitePress) and the workflows'
+# actions up to date. Once a month: one PR with the npm minor and patch
+# updates, a PR of its own for each npm major update (those can need changes),
+# and one PR with the action updates.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']
