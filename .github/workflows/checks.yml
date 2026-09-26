@@ -1,0 +1,57 @@
+name: Checks
+
+on:
+  pull_request:
+
+# Every PR is built before it can be merged: the "Build" check, which main
+# requires. It runs with a read-only token and no saved git credentials, so a
+# PR's code can't change anything.
+#
+# CrismBot's sync PRs are then merged here, when they change nothing but release
+# records (docs/<pack>/data/*.json); anything else waits for a review. A merge
+# made with this workflow's token doesn't start other workflows, so this job
+# starts the deploy itself.
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20 # The same as deploy.yml.
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:build
+
+  merge-sync:
+    name: Merge the sync PR
+    needs: build
+    if: ${{ github.actor == 'CrismBot' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Only release records changed
+        run: |
+          files=$(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[] | .filename, (.previous_filename // empty)')
+          outside=$(printf '%s\n' "$files" | grep -Ev '^docs/[^/]+/data/[^/]+\.json$' || true)
+          if [ -n "$outside" ]; then
+            echo "::error::This PR changes more than release records, so it needs a review."
+            printf '%s\n' "$outside"
+            exit 1
+          fi
+      - name: Merge
+        run: gh pr merge "$PR" --repo "$REPO" --rebase
+      - name: Deploy
+        run: gh workflow run deploy.yml --repo "$REPO" --ref main
