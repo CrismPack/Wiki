@@ -76,7 +76,7 @@ const kofiSvg = '<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/20
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/',
-  // A line's changelog history (changelogs/_1.20.md) is shown on its generated
+  // A line's changelog history (changelogs/_<key>.md) is shown on its generated
   // page, not as a page of its own (see renderLinePage in changelog.mjs).
   srcExclude: ['**/changelogs/_*.md'],
   title: "Crism Modpacks",
