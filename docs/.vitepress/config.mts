@@ -5,7 +5,7 @@ import { defineConfig } from 'vitepress'
 
 import { readdirSync, statSync } from 'fs';
 import { resolve, join } from 'path';
-import { dataContentKeys, compareKeys } from './changelog.mjs';
+import { dataContentKeys, historyKeys, compareKeys } from './changelog.mjs';
 
 
 // Utility function to capitalize the first letter
@@ -52,12 +52,14 @@ function getSidebarItems(folder: string, baseUrl: string): any[] {
 }
 
 
-// Changelog sidebar: legacy hand-rendered pages plus the data-driven MC pages,
-// merged and sorted newest-first with version-aware ordering.
+// Changelog sidebar: legacy hand-rendered pages plus the generated MC pages
+// (from release records or a _<key>.md history), merged and sorted
+// newest-first with version-aware ordering.
 function getChangelogSidebar(pack: string): any[] {
   const base = `/${pack}/changelogs`;
   const legacy = getSidebarItems(`./docs/${pack}/changelogs`, base);
-  const dataItems = dataContentKeys(pack).map((key: string) => ({
+  const generated = [...new Set([...dataContentKeys(pack), ...historyKeys(pack)])];
+  const dataItems = generated.map((key: string) => ({
     text: key,
     link: `${base}/${key}`,
   }));
@@ -74,6 +76,9 @@ const kofiSvg = '<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/20
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/',
+  // A line's changelog history (changelogs/_1.20.md) is shown on its generated
+  // page, not as a page of its own (see renderLinePage in changelog.mjs).
+  srcExclude: ['**/changelogs/_*.md'],
   title: "Crism Modpacks",
   appearance: 'dark',
   

@@ -4,7 +4,8 @@
 // (docs/<pack>/data/<version>+<mc>.json) and renders changelog pages from
 // them. Presentation lives here, not in the pack repos: restyling updates all
 // data-backed history at once. Legacy hand-rendered markdown pages are left
-// untouched and are not driven by this module.
+// untouched, unless their Minecraft line gets new releases: then the page
+// becomes that line's history (see renderLinePage).
 
 import { readdirSync, readFileSync } from 'fs'
 import { resolve } from 'path'
@@ -137,12 +138,57 @@ function renderRelease(r, pack) {
 }
 
 // Full markdown for one content-update page (all its releases, newest first,
-// spanning any patch versions within the content update).
-export function renderMcPage(mc, releases) {
+// spanning any patch versions within the content update). Links point into
+// the pack's wiki folder, which can differ from its name: InsomniaHardcore
+// lives in docs/insomnia.
+function renderMcPage(folder, mc, releases) {
   const ordered = [...releases].sort((a, b) => compareKeys(b.version, a.version))
   const pack = ordered[0]?.pack || ''
   const title = `# ${pack ? pack + ' ' : ''}Changelog for ${mc}\n`
-  return title + ordered.map((r) => renderRelease(r, pack.toLowerCase())).join('\n')
+  return title + ordered.map((r) => renderRelease(r, folder)).join('\n')
+}
+
+// A Minecraft line with a hand-written page from before the release records
+// keeps that page as its history in docs/<pack>/changelogs/_<key>.md, which is
+// not a page of its own (srcExclude in config.mts). The line's page shows its
+// releases from records first, under the history's heading, then the history.
+// A history entry for a version that has a record by now, such as a "Work in
+// progress" entry, is left out, so a line can move over before its release.
+function renderLinePage(folder, key, releases) {
+  let history
+  try {
+    history = readFileSync(resolve(`./docs/${folder}/changelogs/_${key}.md`), 'utf-8')
+  } catch {
+    return renderMcPage(folder, key, releases)
+  }
+  const recorded = new Set(releases.map((r) => anchorFor(r.version)))
+  const first = history.search(/^## /m)
+  const heading = first === -1 ? history : history.slice(0, first)
+  const entries = (first === -1 ? [] : history.slice(first).split(/^(?=## )/m))
+    .filter((entry) => !recorded.has(/id='([^']+)'/.exec(entry.split('\n', 1)[0])?.[1]))
+  const ordered = [...releases].sort((a, b) => compareKeys(b.version, a.version))
+  return heading + ordered.map((r) => renderRelease(r, folder) + '\n').join('') + entries.join('')
+}
+
+// Content-update keys that have a history file (_<key>.md).
+export function historyKeys(folder) {
+  try {
+    return readdirSync(resolve(`./docs/${folder}/changelogs`))
+      .filter((f) => /^_.+\.md$/.test(f))
+      .map((f) => f.slice(1, -'.md'.length))
+  } catch {
+    return []
+  }
+}
+
+// The pages [mc].paths.js generates: one per content update that has release
+// records or a history file.
+export function mcPages(folder) {
+  const releases = loadReleases(folder)
+  return [...new Set([...dataContentKeys(folder), ...historyKeys(folder)])].map((key) => ({
+    params: { mc: key },
+    content: renderLinePage(folder, key, releases.filter((r) => contentKey(r.minecraft) === key)),
+  }))
 }
 
 // Full markdown for one release's Mod Updates page (the version bumps).
