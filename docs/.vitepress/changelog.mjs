@@ -25,7 +25,7 @@ export function loadReleases(pack) {
 // Parse a version into a comparable key, mirroring the tool's
 // pack_version.parse_pack_version_key ordering (MC-scheme and legacy semver,
 // pre-releases below their stable release; unparseable sorts lowest).
-const PRE_RANK = { dev: 0, alpha: 1, a: 1, beta: 2, b: 2, rc: 3 }
+const PRE_RANK = { dev: 0, alpha: 1, a: 1, beta: 2, b: 2, rc: 3, pre: 3 }
 const FINAL_PRE = [9, 0]
 
 function ints(text) {
@@ -35,24 +35,28 @@ function ints(text) {
 }
 
 function splitPre(text) {
-  const m = /^(.+?)[-_.](alpha|beta|rc)[.\-_]?(\d+)?$/i.exec(text)
+  const m = /^(.+?)[-_.](alpha|beta|rc|pre)[.\-_]?(\d+)?$/i.exec(text)
   if (!m) return [text, FINAL_PRE]
   return [m[1], [PRE_RANK[m[2].toLowerCase()], Number(m[3] || 0)]]
 }
 
+// Keys are [kind, main, release, pre-release, post-release, text].
 export function versionKey(raw) {
   const s = String(raw || '').trim()
-  if (!s) return [0, [], [], FINAL_PRE, '']
+  if (!s) return [0, [], [], FINAL_PRE, 0, '']
   const [base, pre] = splitPre(s)
   const dash = base.indexOf('-')
   if (dash !== -1) {
     const mc = ints(base.slice(0, dash))
     const rel = ints(base.slice(dash + 1))
-    if (mc && rel) return [1, mc, rel, pre, s.toLowerCase()]
+    if (mc && rel) return [1, mc, rel, pre, 0, s.toLowerCase()]
   }
   const solo = ints(base)
-  if (solo) return [1, solo, [], pre, s.toLowerCase()]
-  return [0, [], [], FINAL_PRE, s.toLowerCase()]
+  if (solo) return [1, solo, [], pre, 0, s.toLowerCase()]
+  // "4.1.1a" is post-release 1 of 4.1.1 (a=1, b=2, ...), as in the tool.
+  const lettered = /^(\d+\.\d+\.\d+)([a-z])$/i.exec(s)
+  if (lettered) return [1, ints(lettered[1]), [], FINAL_PRE, lettered[2].toLowerCase().charCodeAt(0) - 96, s.toLowerCase()]
+  return [0, [], [], FINAL_PRE, 0, s.toLowerCase()]
 }
 
 // Lexicographic compare of two version keys (returns <0 / 0 / >0).
@@ -94,7 +98,8 @@ export function contentKey(mc) {
   return nums.length ? nums.slice(0, 2).join('.') : String(mc || '').trim()
 }
 
-const codify = (line) => String(line).replace(/\[([^\]]+)\]/g, '`$1`')
+// "[Mod Menu]" becomes a code span; an escaped "\[1, 3]" stays as written.
+const codify = (line) => String(line).replace(/(?<!\\)\[([^\]]+)\]/g, '`$1`')
 const bullets = (lines) => (lines || []).map((l) => `- ${l}`).join('\n')
 
 // A pre-release's kind and full release: { kind: 'beta', full: '26.2-1.0' } for
