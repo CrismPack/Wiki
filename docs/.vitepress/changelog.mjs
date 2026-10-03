@@ -115,13 +115,16 @@ function prerelease(version) {
 }
 
 // A pre-release's badge, and the notice that also heads its release notes
-// (the tool's changelog.PrereleaseNotice).
+// (the tool's changelog.PrereleaseNotice). Alphas and dev builds are early and
+// incomplete, so theirs says so plainly, in a danger box like their badge.
+const EARLY = "so it's far from complete. Expect missing mods, unfinished features and bugs."
+const LESS = 'so it may be less stable or feature complete than a full release.'
 const PRE_LABELS = {
-  alpha: { badge: 'danger', text: 'Alpha', notice: 'an alpha' },
-  beta: { badge: 'warning', text: 'Beta', notice: 'a beta' },
-  rc: { badge: 'warning', text: 'Release Candidate', notice: 'a release candidate' },
-  dev: { badge: 'danger', text: 'Dev Build', notice: 'a development build' },
-  pre: { badge: 'warning', text: 'Pre-release', notice: 'a pre-release' },
+  alpha: { badge: 'danger', text: 'Alpha', notice: `This is an alpha, ${EARLY}` },
+  beta: { badge: 'warning', text: 'Beta', notice: `This is a beta, ${LESS}` },
+  rc: { badge: 'warning', text: 'Release Candidate', notice: `This is a release candidate, ${LESS}` },
+  dev: { badge: 'danger', text: 'Dev Build', notice: `This is a development build, ${EARLY}` },
+  pre: { badge: 'warning', text: 'Pre-release', notice: `This is a pre-release, ${LESS}` },
 }
 
 // The release that a pack's main modlist page shows: its newest full release
@@ -164,7 +167,7 @@ function renderRelease(r, pack, { level = 2, notice = true, modlist } = {}) {
     out += `\n::: info\nChanges are in comparison to version [${c.version}](/${pack}/changelogs/${contentKey(c.minecraft)}#${anchorFor(c.version)}).\n:::\n`
   }
   if (label && notice) {
-    out += `\n::: warning\nThis is ${label.notice}, so it may be less stable or feature complete than a full release. Here be dragons!\n:::\n`
+    out += `\n::: ${label.badge}\n${label.notice} Here be dragons!\n:::\n`
   }
   out += section('Update Overview ⭐', r.overview)
   out += section('Changes/Improvements ⭐', r.changes)
